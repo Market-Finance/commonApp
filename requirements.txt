@@ -15,4 +15,3 @@ datapackage
 requests
 numpy
 datetime
-datapackage
