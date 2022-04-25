@@ -82,6 +82,27 @@ python -m venv .venv
     "X_RAPIDAPI_KEY": "x-rapidapi-key <define your X_RAPIDAPI_KEY>"
 }
 ```
+## Create Azure function App on Azure portal
+```
+# Create Function app
+## Basic
+subscription= <define your Azure subscription>
+resouces_group= <define your resource group>
+function_app_name= <define your function app name>
+publish= 'code'
+Runtime_stack= python
+region= 'australiaEast'
+
+## Hosting
+storage_account_name= <define your blob storage account name>
+operating_system= 'linux'
+plan_type= 'App service plan'
+linux_plan= <define your app service plan name>
+sku_and_size= <select based on the app service plan>
+
+# follow default settings for other sections
+## Create
+```
 
 ## Setup and Configure variables for Azure function environment
 ```
@@ -90,6 +111,28 @@ az functionapp config appsettings set --name $funcapp_name --resource-group $res
 az functionapp config appsettings set --name $funcapp_name --resource-group $resource_group_name --settings "ADLS_SECRET_NAME=adls-access-key1"
 az functionapp config appsettings set --name $funcapp_name --resource-group $resource_group_name --settings "X_RAPIDAPI_HOST= x-rapidapi-host"
 az functionapp config appsettings set --name $funcapp_name --resource-group $resource_group_name --settings "X_RAPIDAPI_KEY= x-rapidapi-key"
+```
+## Azure functions App role assigments for all the service such as blob storage, DataLake and keyvault
+```
+az functionapp identity assign --resource-group $resource_group_name --name $funcapp_name
+$func_principal_id=$(az resource list --name $funcapp_name --query [*].identity.principalId --output tsv)
+$kv_scope=$(az resource list --name $key_vault_name --query [*].id --output tsv)
+az keyvault set-policy --name $key_vault_name --resource-group $resource_group_name --object-id $func_principal_id --secret-permission get list set
+az role assignment create --assignee $func_principal_id --role 'Key Vault Contributor' --scope $kv_scope
+az role assignment create --assignee $func_principal_id --role 'Storage Blob Data Contributor' --resource-group  $resource_group_name
+az role assignment create --assignee $func_principal_id --role 'Storage Queue Data Contributor' --resource-group  $resource_group_name
+```
+## Setup CI/CD for Azure function application
+```
+# Deployment center for commonApp
+source= 'Github'
+sign_in= <define your github username and password>
+organisation= <define your organisation name>
+repository= <define your repository>
+branch= main
+build_povider= 'GitHub Actions'
+Runtime_stack= python
+Version= Python 3.8
 ```
 
 ## Common app flow diagram
