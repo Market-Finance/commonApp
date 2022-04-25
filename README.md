@@ -1,4 +1,4 @@
-# Yahoo Finance Common Application API Document
+# Market Finance- Common Application
 
 ## Establish Global variables for Azure CLI
 ```
