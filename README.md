@@ -42,7 +42,7 @@ $abs_secret_name= <define your blob storage secrets name>
 $adls_secret_name= <define your data lake storage secrets name>
 
 # Define the function application name
-$funcapp_name= commonapp
+$funcapp_name= commonApp
 ```
 
 ## Create a new repository in Github
