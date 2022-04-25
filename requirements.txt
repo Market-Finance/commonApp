@@ -1,6 +1,4 @@
 # Do not include azure-functions-worker as it may conflict with the Azure Functions platform
-
-# import packages
 azure-core
 azure-storage-file-datalake
 azure-functions
@@ -10,7 +8,6 @@ azure-storage-blob
 azure-keyvault-secrets
 azure-functions
 azure-mgmt-storage
-
 pandas
 pyarrow
 fastparquet
