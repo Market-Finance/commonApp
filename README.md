@@ -135,6 +135,17 @@ Runtime_stack= python
 Version= Python 3.8
 ```
 
+## Check the configuration of the Azure function Application
+```
+# CommonApp configuration
+# Application settings 
+# Name value and source of 
+# ABS_SECRET_NAME, ADLS_SECRET_NAME, X_RAPIDAPI_HOST, X_RAPID_API_KEY are
+# referencing the key vault, if not add it manually
+click edit, change and save
+for value
+@Microsoft.KeyVault(SecretUri=https://<key_vault_name>.vault.azure.net/secrets/<secret_name>/<version>)
+```
 ## Common app flow diagram
 ```mermaid
     flowchart TD
