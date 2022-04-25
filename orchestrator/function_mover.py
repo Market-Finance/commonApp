@@ -1,5 +1,4 @@
-from shared.mover import blob_storage_upload
-from shared.mover import data_lake_storage_upload
+from shared import mover as mo
 
 def auto_complete_mover_out(inMemory_data):
     """
@@ -16,6 +15,6 @@ def auto_complete_mover_out(inMemory_data):
     data_lake_file_path= 'common/auto_complete'
     data_lake_file_name= 'auto_complete'
 
-    blob_storage_upload(inMemory_data, blob_file_path, blob_file_name)
-    data_lake_storage_upload(inMemory_data, data_lake_file_path, data_lake_file_name)
+    mo.blob_storage_upload(inMemory_data, blob_file_path, blob_file_name)
+    mo.data_lake_storage_upload(inMemory_data, data_lake_file_path, data_lake_file_name)
     return "Success"

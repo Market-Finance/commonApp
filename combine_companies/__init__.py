@@ -12,4 +12,4 @@ def main(name:str):
     combine_list= [tr.asxlisted_companies(), tr.nasdaqlisted_companies()]
 
     combine_companies= tr.combine_company_list(combine_list)
-    return combine_companies[:5]
+    return combine_companies
