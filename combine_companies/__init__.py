@@ -11,5 +11,5 @@ def main(name:str):
     # AutoComplete Data Transformation
     combine_list= [tr.asxlisted_companies(), tr.nasdaqlisted_companies()]
 
-    combine_company= tr.combine_company_list(combine_list)
-    return combine_company
+    combine_companies= tr.combine_company_list(combine_list)
+    return combine_companies
