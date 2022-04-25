@@ -4,7 +4,7 @@ import os
 from datetime import datetime
 import azure.functions as func
 import azure.durable_functions as df
-from function_mover import auto_complete_mover_out
+from . import function_mover as fm
 
 def orchestrator_function(context: df.DurableOrchestrationContext):
     
@@ -16,6 +16,6 @@ def orchestrator_function(context: df.DurableOrchestrationContext):
     
     inMemory_data= yield context.task_all(auto_complete_activity)
 
-    return auto_complete_mover_out(inMemory_data)
+    return fm.auto_complete_mover_out(inMemory_data)
 
 main = df.Orchestrator.create(orchestrator_function)
