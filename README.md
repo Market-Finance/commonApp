@@ -164,12 +164,8 @@ for value
             BB[NASDAQ listed companies]
             B[Combine List companies]
             D[Orchestrator]
-            E[Mover]
-            EA[Shared]
             F[Blob Storage]
             G[Data Lake]
-            EA --> E
-            E --> D
 
             subgraph Common Application Durable Functions HTTP Start
                 BA --> B
