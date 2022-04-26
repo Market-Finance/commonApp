@@ -1,6 +1,6 @@
 # Market Finance- Common Application
 
-## Establish Global variables for Azure CLI
+## 1. Establish Global variables for Azure CLI
 ```
 # Define the region for Application services
 $service_location= <define your server location>
@@ -45,12 +45,12 @@ $adls_secret_name= <define your data lake storage secrets name>
 $funcapp_name= commonApp
 ```
 
-## Create a new repository in Github
+## 2. Create a new repository in Github
 ```
 # git clone to the project root
 git clone <url>
 ```
-## Create a Azure function app
+## 3. Create a Azure function app
 ```
 # Create a function project in the desired folder
 # Make sure your are in the right folder directory
@@ -63,7 +63,7 @@ python -m venv .venv
 ...venv\Scripts\activate
 ````
 
-## Configure host.json file
+## 4. Configure host.json file
 ```
 # Open the host.json file and add function Time out limit
 ## Set to 3 hours
@@ -71,7 +71,7 @@ python -m venv .venv
     "functionTimeout": "03:00:00"
 }
 ```
-## Configure the local.settings.json file
+## 5. Configure the local.settings.json file
 ```
 # Open the local.settings file and define the following
 {
@@ -82,7 +82,7 @@ python -m venv .venv
     "X_RAPIDAPI_KEY": "x-rapidapi-key <define your X_RAPIDAPI_KEY>"
 }
 ```
-## Create Azure function App on Azure portal
+## 6. Create Azure function App on Azure portal
 ```
 # Create Function app
 ## Basic
@@ -104,7 +104,7 @@ sku_and_size= <select based on the app service plan>
 ## Create
 ```
 
-## Setup and Configure variables for Azure function environment
+## 7. Setup and Configure variables for Azure function environment
 ```
 az functionapp config appsettings set --name $funcapp_name --resource-group $resource_group_name --settings "KEY_VAULT_NAME=kvmarketfinance"
 az functionapp config appsettings set --name $funcapp_name --resource-group $resource_group_name --settings "ABS_SECRET_NAME=abs-access-key1"
@@ -112,7 +112,7 @@ az functionapp config appsettings set --name $funcapp_name --resource-group $res
 az functionapp config appsettings set --name $funcapp_name --resource-group $resource_group_name --settings "X_RAPIDAPI_HOST= x-rapidapi-host"
 az functionapp config appsettings set --name $funcapp_name --resource-group $resource_group_name --settings "X_RAPIDAPI_KEY= x-rapidapi-key"
 ```
-## Azure functions App role assigments for all the service such as blob storage, DataLake and keyvault
+## 8. Azure functions App role assigments for all the service such as blob storage, DataLake and keyvault
 ```
 az functionapp identity assign --resource-group $resource_group_name --name $funcapp_name
 $func_principal_id=$(az resource list --name $funcapp_name --query [*].identity.principalId --output tsv)
@@ -122,7 +122,7 @@ az role assignment create --assignee $func_principal_id --role 'Key Vault Contri
 az role assignment create --assignee $func_principal_id --role 'Storage Blob Data Contributor' --resource-group  $resource_group_name
 az role assignment create --assignee $func_principal_id --role 'Storage Queue Data Contributor' --resource-group  $resource_group_name
 ```
-## Setup CI/CD for Azure function application
+## 9. Setup CI/CD for Azure function application
 ```
 # Deployment center for commonApp
 source= 'Github'
@@ -135,7 +135,7 @@ Runtime_stack= python
 Version= Python 3.8
 ```
 
-## Check the configuration of the Azure function Application
+## 10. Check the configuration of the Azure function Application
 ```
 # CommonApp configuration
 # Application settings 
@@ -146,7 +146,16 @@ click edit, change and save
 for value
 @Microsoft.KeyVault(SecretUri=https://<key_vault_name>.vault.azure.net/secrets/<secret_name>/<version>)
 ```
-## Common app flow diagram
+## 11. Common Application Implementation Overview
+
+### 11.1 Activities
+#### Combine Companies 
+#### Auto Complete
+
+### 11.2 DurableFunction Http 
+### 11.3 Orchestrator
+### 11.4 Shared
+
 ```mermaid
     flowchart TD
     A[Auto Complete]
@@ -169,6 +178,12 @@ for value
         B -- FAN OUT to list of companies --> D 
         A --> D
         end    
+```
+
+## 12. Git push and Deploy
+```
+# commit the changes and push
+git push
 ```
 
 
