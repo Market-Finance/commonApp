@@ -73,7 +73,7 @@ python -m venv .venv
 ```
 ## Configure the local.settings.json file
 ```
-# Open the local.settings file and the following
+# Open the local.settings file and define the following
 {
     "ABS_SECRET_NAME": "abs-access-key1" <define your blob secret name stored in the secret valult>,
     "ADLS_SECRET_NAME": "adls-access-key1" <define your data lake secret name stored in the secret vault> ,
