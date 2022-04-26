@@ -4,7 +4,7 @@ from . import transform as tr
 def main(name:str):
     """
     DESCRIPTION: The purpose of this function is to extract and combine list
-                 of ASX and NASDAQ listed companies and combine
+                 of ASX and NASDAQ listed companies
     INPUT: None
     OUTPUT: list of combined companies
     """
