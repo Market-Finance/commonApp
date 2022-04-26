@@ -21,5 +21,6 @@ def main(querystring):
     OUTPUT: auto_complete dictionary
     """
     url= "https://apidojo-yahoo-finance-v1.p.rapidapi.com/auto-complete"
-    auto_complete_dict= miner(url, querystring)
-    return auto_complete_dict
+    auto_complete_dict= {"auto_complete": miner(url, querystring)}
+    querystring.update(auto_complete_dict)
+    return querystring
