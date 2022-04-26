@@ -158,26 +158,28 @@ for value
 
 ```mermaid
     flowchart TD
-    A[Auto Complete]
-    BA[ASX listed companies]
-    BB[NASDAQ listed companies]
-    B[Combine List companies]
-    D[Orchestrator]
-    E[Mover]
-    EA[Shared]
-    F[Blob Storage]
-    G[Data Lake]
-    EA --> E
-    E --> D
+    subgraph Flow diagram details the overview of Common Engine Implementation
+            A[Auto Complete]
+            BA[ASX listed companies]
+            BB[NASDAQ listed companies]
+            B[Combine List companies]
+            D[Orchestrator]
+            E[Mover]
+            EA[Shared]
+            F[Blob Storage]
+            G[Data Lake]
+            EA --> E
+            E --> D
 
-    subgraph Common Application Durable Functions HTTP Start
-        BA --> B
-        BB --> B
-        D -- FAN IN, and Upload --> G 
-        D -- FAN IN, and Upload --> F
-        B -- FAN OUT to list of companies --> D 
-        A --> D
-        end    
+            subgraph Common Application Durable Functions HTTP Start
+                BA --> B
+                BB --> B
+                D -- FAN IN, and Upload --> G 
+                D -- FAN IN, and Upload --> F
+                B -- FAN OUT to list of companies --> D 
+                A --> D
+                end
+            end    
 ```
 
 ## 12. Git push and Deploy
