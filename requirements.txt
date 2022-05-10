@@ -14,4 +14,4 @@ fastparquet
 datapackage
 requests
 numpy
-datetime
+datetim
