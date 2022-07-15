@@ -170,15 +170,49 @@ for value
 @Microsoft.KeyVault(SecretUri=https://<key_vault_name>.vault.azure.net/secrets/<secret_name>/<version>)
 ```
 ## 12. Common Application Implementation Overview
+### 12.1 Durable function
+The durable function is an extension of Azure functions that utilises stateful operations in a serverless environment. The extension manages state, checkpoints, and restarts based on the demand. Durable parts have several features that make it easy to incorporate durable orchestrations and entities into HTTP workflow.
 
-### 12.1 Activities
+    1. Express your workflows in code
+    2. Retry activities
+    3. Run activities in parallel
+    4. Timeout workflows
+    5. State management for free
+    6. Check on workflow progress with REST API
+    7. Cancel workflow
+    8. Serverless pricing model
+    9. Versioning made easier 
+    10. Develop and test locally distributed
+### 12.2 Activities
+The Azure function activity allows running Azure functions in an Azure Data Factory pipeline. By creating a linked services connection, we can run Azure functions. The linked services can control the execution plan for an Azure function.
+
 #### Combine Companies 
+Combining companies' activities is used to extract the list of targeted companies. A combined companies list script was written to scale and merge multiple sources of the company list. Given the current requirements of the market scanner, only NASDAQ and ASX listed companies are used in the list consolidation. Future updates will include NZX, etc., and the necessary framework is established to accommodate the updates.
+
 #### Auto Complete
+Once the combined companies list is extracted from various open data sources, the list of companies is passed through the auto-complete Rapid API to standardise the stock symbols. This auto-complete is an API that takes in query text string (could be partial name or symbol), conducts a search, finds the closest match, and spits out the standardised symbol for a given stock. This is ideal as it mitigates any risk of running incorrect queries for other API Calls with takes in the parameters from Auto-Complete response JSON. 
 
-### 12.2 DurableFunction Http 
+The query string list runs through the Fan-out/ Fan in Durable function pattern. This executes multiple functions in parallel and then wait for all function to finish. In our case, during the fan in the JSON response is appended together. 
+
+### 12.3 DurableFunction Http 
+This feature simplifies calling HTTP APIs from your orchestrator functions. As you may know, in an orchestrator function, you're not allowed to perform any non-deterministic operations, so to call an HTTP API, you would need to call an activity function and make the HTTP request there. The Durable HTTP feature removes the need to create an additional activity function.
+
+Durable functions have several features that make it easy to incorporate durable orchestrations and entities into HTTP workflows—and utilising async operations tracking, with this approach, if the calling API's long-running operations, it would simply return 202 and the running status. We could call the API again to find the status of the running session until the underlying activities are completed. 
+
 ### 12.3 Orchestrator
-### 12.4 Shared
+The orchestrator function is used to orchestrate the execution of other Durable functions within a function app (CommonApp). The following are some of the characteristics of the orchestrator function. 
+    
+    - Orchestrator functions define function workflows using procedural code. No declarative schemas or designers are needed. 
+    - Orchestrator functions can call other durable functions synchronously and asynchronosuly. Output from called functions can be reliably saved to local variables. 
+    - Orchestrator functions are durable and reliable. Execution progress is automatically checkpointed when the function "yield". Local state is never lost when the process recycles or the VM reboots. 
+    - Orchestrator functions can be long-running. The total lifespan of an orchestration instance can be seconds, days, months, or never-ending. 
 
+### 12.4 Shared
+#### 12.4.1 Function Requests
+Function Request is a generalised function named miner that takes in the API endpoint URL and its respective query string. It checks for the error message and tries to execute the call again (if it exceeds the rate limit) by adding a sleep statement for a few seconds. This returns a JSON response and gets appended while the miner function gets used in an activity function.
+
+#### 12.4.2 Mover
+Mover file is a compilation of various code snips such as,  blob_container_service_client, datalake_service_client, return_blob_files, blob_storage_download, blob_storage_upload, and blob_storage_upload, data_lake_storage_upload, and blob_storage_delete. The file represents all the data mover in and out to the functions Local Memeory. 
 ```mermaid
     flowchart TD
     subgraph Flow diagram details the overview of Common App Engine Implementation
