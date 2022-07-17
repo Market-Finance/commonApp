@@ -213,7 +213,7 @@ The orchestrator function is used to orchestrate the execution of other Durable 
 Function Request is a generalised function named miner that takes in the API endpoint URL and its respective query string. It checks for the error message and tries to execute the call again (if it exceeds the rate limit) by adding a sleep statement for a few seconds. This returns a JSON response and gets appended while the miner function gets used in an activity function.
 
 #### 12.4.2 Mover
-Mover file is a compilation of various code snips such as,  blob_container_service_client, datalake_service_client, return_blob_files, blob_storage_download, blob_storage_upload, and blob_storage_upload, data_lake_storage_upload, and blob_storage_delete. The file represents all the data mover in and out to the functions Local Memeory/ storage (blob and datalake). 
+Mover file is a compilation of various code snips such as,  blob_container_service_client, datalake_service_client, return_blob_files, blob_storage_download, blob_storage_upload, and blob_storage_upload, data_lake_storage_upload, and blob_storage_delete. The file represents all the data mover in and out of the function's Local Memeory/ storage (blob and datalake). 
 ```mermaid
     flowchart TD
     subgraph Flow diagram details the overview of Common App Engine Implementation
