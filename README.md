@@ -1,5 +1,5 @@
 # Market Finance- Common Application
-The purpose of the Market Finance common application is to extract the starting point for the analytical engine. The starting point, meaning the stock symbol, region, company names and symbol's news clippings id for the query search. The starting point is extracted by using open source NASDAQ and ASX listing API. Then the list is appended and passed through the Yahoo Finance API to pull the standardised API's query string for other endpoint requests, as the schema's requirements are slightly different. As a result, the success of API calls is increased, and this approach improves the data quality (fixing the data upstream).
+The purpose of the Market Finance common application is to extract the starting point for the analytical engine. The starting point, meaning the stock symbol, region, company names and symbol's news clippings id for the query search. The starting point is extracted by using open source NASDAQ and ASX listing API. Then the list is appended and passed through the Yahoo Finance API to pull the standardised API's query string for other endpoint requests, as the schema's requirements are slightly different. As a result, the success of API calls is increased, and this approach improves the data quality by fixing the data upstream.
 ## 1. Local System Setup
 ```
 # Check for python version 3.7 or greater
