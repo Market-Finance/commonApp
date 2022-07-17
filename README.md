@@ -1,4 +1,5 @@
 # Market Finance- Common Application
+The purpose of the Market Finance common application is to extract the starting point for the analytical engine. The starting point, meaning the stock symbol, region, company names and symbol's news clippings id for the query search. The starting point is extracted by using open source NASDAQ and ASX listing API. Then the list is appended and passed through the Yahoo Finance API to pull the standardised API's query string for other endpoint requests, as the schema's requirements are slightly different. As a result, the success of API calls is increased, and this approach improves the data quality (fixing the data upstream).
 ## 1. Local System Setup
 ```
 # Check for python version 3.7 or greater
@@ -212,7 +213,7 @@ The orchestrator function is used to orchestrate the execution of other Durable 
 Function Request is a generalised function named miner that takes in the API endpoint URL and its respective query string. It checks for the error message and tries to execute the call again (if it exceeds the rate limit) by adding a sleep statement for a few seconds. This returns a JSON response and gets appended while the miner function gets used in an activity function.
 
 #### 12.4.2 Mover
-Mover file is a compilation of various code snips such as,  blob_container_service_client, datalake_service_client, return_blob_files, blob_storage_download, blob_storage_upload, and blob_storage_upload, data_lake_storage_upload, and blob_storage_delete. The file represents all the data mover in and out to the functions Local Memeory. 
+Mover file is a compilation of various code snips such as,  blob_container_service_client, datalake_service_client, return_blob_files, blob_storage_download, blob_storage_upload, and blob_storage_upload, data_lake_storage_upload, and blob_storage_delete. The file represents all the data mover in and out to the functions Local Memeory/ storage (blob and datalake). 
 ```mermaid
     flowchart TD
     subgraph Flow diagram details the overview of Common App Engine Implementation
