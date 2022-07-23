@@ -333,6 +333,3 @@ git push
 ```
 
 [Back to Table of Contents](https://github.com/Market-Finance/commonApp#table-of-contents)
-
-
-
