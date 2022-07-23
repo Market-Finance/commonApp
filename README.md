@@ -48,7 +48,6 @@ The purpose of the Market Finance common application is to extract the starting 
 <a name="#1252mover"/>
 <a name="#13-git-push-and-deploy"/>
 
-
 The following details the implementation of the Common Application (end-to-end)
 ## 1. Local System Setup
 ```
