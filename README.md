@@ -1,6 +1,54 @@
 # Market Finance- Common Application
 The purpose of the Market Finance common application is to extract the starting point for the analytical engine. The starting point, meaning the stock symbol, region, company names and symbol's news clippings id for the query search. The starting point is extracted by using open source NASDAQ and ASX listing API. Then the list is appended and passed through the Yahoo Finance API to pull the standardised API's query string for other endpoint requests, as the schema's requirements are slightly different. As a result, the success of API calls is increased, and this approach improves the data quality by fixing the data upstream.
 
+## Table of Contents  
+- [Local System Setup](#1-local-system-setup)
+- [Establish Global variables for Azure CLI](#2-establish-global-variables-for-azure-cli)
+- [Create a new repository in Github](#3-create-a-new-repository-in-github)
+- [Create a Azure function app](#4-create-a-azure-function-app)
+- [Configure host.json file](#5-configure-hostjson-file)
+- [Configure the local.settings.json file](#6-configure-the-localsettingsjson-file)
+- [Create Azure function App on Azure portal](#7-create-azure-function-app-on-azure-portal)
+- [Setup and Configure variables for Azure function environment](#8-setup-and-configure-variables-for-azure-function-environment)
+- [Azure functions App role assigments for all the service such as blob storage, DataLake and keyvault](#9-azure-functions-app-role-assigments-for-all-the-service-such-as-blob-storage-datalake-and-keyvault)
+- [Setup CI/CD for Azure function application](#10-setup-cicd-for-azure-function-application)
+- [Check the configuration of the Azure function Application](#11-check-the-configuration-of-the-azure-function-application)
+- [Stock Application Implementation Overview](#12-stock-application-implementation-overview)
+    - [Durable Functions](#121-durable-functions)
+    - [Activities](#122-activities)
+        - [Combine companies](#combine-companies)
+        - [Auto complete](#auto-complete)
+    - [DurableFunction Http](#123-durablefunction-http)
+    - [Orchestrator](#124-orchestrator)
+    - [Shared](#125-shared)
+        - [Function Requests](#1251-function-requests)
+        - [Mover](#1252-mover)
+- [Git push and Deploy](#13-git-push-and-deploy)
+
+<a name="1-local-system-setup"/>
+<a name="2-establish-global-variables-for-azure-cli"/>
+<a name="3-create-a-new-repository-in-github"/>
+<a name="4-create-a-azure-function-app"/>
+<a name="5-configure-hostjson-file"/>
+<a name="#6-configure-the-localsettingsjson-file"/>
+<a name="#7-create-azure-function-app-on-azure-portal"/>
+<a name="#8-setup-and-configure-variables-for-azure-function-environment"/>
+<a name="#9-azure-functions-app-role-assigments-for-all-the-service-such-as-blob-storage-datalake-and-keyvault"/>
+<a name="#10-setup-cicd-for-azure-function-application"/>
+<a name="#11-check-the-configuration-of-the-azure-function-application"/>
+<a name="#12-stock-application-implementation-overview"/>
+<a name="#121-durable-functions"/>
+<a name="#122-activities"/>
+<a name="#combine-companies"/>
+<a name="#auto-complete"/>
+<a name="#123-durablefunction-http"/>
+<a name="#124-orchestrator"/>
+<a name="#125-shared"/>
+<a name="#1251function-request"/>
+<a name="#1252mover"/>
+<a name="#13-git-push-and-deploy"/>
+
+
 The following details the implementation of the Common Application (end-to-end)
 ## 1. Local System Setup
 ```
@@ -173,6 +221,27 @@ for value
 @Microsoft.KeyVault(SecretUri=https://<key_vault_name>.vault.azure.net/secrets/<secret_name>/<version>)
 ```
 ## 12. Common Application Implementation Overview
+```mermaid
+    flowchart TD
+    subgraph Flow diagram details the overview of Common App Engine Implementation
+            A[Auto Complete]
+            BA[ASX listed companies]
+            BB[NASDAQ listed companies]
+            B[Combine List companies]
+            D[Orchestrator]
+            F[Blob Storage]
+            G[Data Lake]
+
+            subgraph Common Application Durable Functions HTTP Start
+                BA --> B
+                BB --> B
+                D -- FAN IN, and Upload --> G 
+                D -- FAN IN, and Upload --> F
+                B -- FAN OUT to list of companies --> D 
+                A --> D
+                end
+            end    
+```
 ### 12.1 Durable function
 The durable function is an extension of Azure functions that utilises stateful operations in a serverless environment. The extension manages state, checkpoints, and restarts based on the demand. Durable parts have several features that make it easy to incorporate durable orchestrations and entities into HTTP workflow.
 
@@ -202,7 +271,7 @@ This feature simplifies calling HTTP APIs from your orchestrator functions. As y
 
 Durable functions have several features that make it easy to incorporate durable orchestrations and entities into HTTP workflows—and utilising async operations tracking, with this approach, if the calling API's long-running operations, it would simply return 202 and the running status. We could call the API again to find the status of the running session until the underlying activities are completed. 
 
-### 12.3 Orchestrator
+### 12.4 Orchestrator
 The orchestrator function is used to orchestrate the execution of other Durable functions within a function app (CommonApp). The following are some of the characteristics of the orchestrator function. 
     
     - Orchestrator functions define function workflows using procedural code. No declarative schemas or designers are needed. 
@@ -210,33 +279,12 @@ The orchestrator function is used to orchestrate the execution of other Durable 
     - Orchestrator functions are durable and reliable. Execution progress is automatically checkpointed when the function "yield". Local state is never lost when the process recycles or the VM reboots. 
     - Orchestrator functions can be long-running. The total lifespan of an orchestration instance can be seconds, days, months, or never-ending. 
 
-### 12.4 Shared
-#### 12.4.1 Function Requests
+### 12.5 Shared
+#### 12.5.1 Function Requests
 Function Request is a generalised function named miner that takes in the API endpoint URL and its respective query string. It checks for the error message and tries to execute the call again (if it exceeds the rate limit) by adding a sleep statement for a few seconds. This returns a JSON response and gets appended while the miner function gets used in an activity function.
 
-#### 12.4.2 Mover
+#### 12.5.2 Mover
 Mover file is a compilation of various code snips such as,  blob_container_service_client, datalake_service_client, return_blob_files, blob_storage_download, blob_storage_upload, and blob_storage_upload, data_lake_storage_upload, and blob_storage_delete. The file represents all the data mover in and out of the function's Local Memeory/ storage (blob and datalake). 
-```mermaid
-    flowchart TD
-    subgraph Flow diagram details the overview of Common App Engine Implementation
-            A[Auto Complete]
-            BA[ASX listed companies]
-            BB[NASDAQ listed companies]
-            B[Combine List companies]
-            D[Orchestrator]
-            F[Blob Storage]
-            G[Data Lake]
-
-            subgraph Common Application Durable Functions HTTP Start
-                BA --> B
-                BB --> B
-                D -- FAN IN, and Upload --> G 
-                D -- FAN IN, and Upload --> F
-                B -- FAN OUT to list of companies --> D 
-                A --> D
-                end
-            end    
-```
 
 ## 13. Git push and Deploy
 ```
