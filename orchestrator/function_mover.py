@@ -8,7 +8,7 @@ def auto_complete_mover_out(inMemory_data):
     OUTPUT: status string
     """
     # Blob file path and file_name destination
-    blob_file_path= 'MarketFinance/common'
+    blob_file_path= 'MarketFinance/common/auto_complete_new'
     blob_file_name= 'auto_complete.json'
 
      # Data Lake path and file_name destination
