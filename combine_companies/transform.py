@@ -46,7 +46,7 @@ def asxlisted_companies():
         company_dict.update(insert_dict)
         company_list.append(company_dict)
 
-    return company_list[:150]
+    return company_list
 
 def nasdaqlisted_companies():
     """
@@ -77,7 +77,7 @@ def nasdaqlisted_companies():
         company_dict.update(insert_dict)
         company_dict_list.append(company_dict)
             
-    return company_dict_list[:150]
+    return company_dict_list
 
 def combine_company_list(company_list:list):
     """
